@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2006-2019 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE generatorConfiguration PUBLIC
+ "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+ "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <properties resource="scripts/database.properties"/>
+  <classPathEntry location="${user.home}/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
+
+
+  <context id="MysqlTables" defaultModelType="flat" targetRuntime="MyBatis3">
+    <!-- 遇到sql关键字添加转义 -->
+    <property name="autoDelimitKeywords" value="true"/>
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+    <!-- 生成的Java文件的编码 -->
+    <property name="javaFileEncoding" value="UTF-8"/>
+
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+    <!--<plugin type="org.mybatis.generator.plugins.FluentBuilderMethodsPlugin"/>
+    <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>-->
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+    <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+    <!-- XML 直接覆盖的插件 -->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!-- 自定义BaseMapper插件 -->
+    <plugin type="org.mybatis.generator.plugins.base.BaseMapperPlugin" />
+    <!-- 自定义注解格式 -->
+    <commentGenerator type="org.mybatis.generator.internal.MysqlCommentGenerator">
+      <!--<property name="suppressAllComments" value="true" />-->
+      <property name="addRemarkComments" value="true"/>
+    </commentGenerator>
+
+
+    <jdbcConnection driverClass="${mysql.driver.class}"
+                    connectionURL="${mysql.database.url}"
+                    userId="${mysql.user.name}"
+                    password="${mysql.password}">
+      <!-- 设置 useInformationSchema 属性为 true MODEL类注释 -->
+      <property name="useInformationSchema" value="true" />
+    </jdbcConnection>
+
+    <!--<javaTypeResolver >-->
+    <!--<property name="forceBigDecimals" value="false" />-->
+    <!--</javaTypeResolver>-->
+
+    <!--  实体类,example -->
+    <javaModelGenerator targetPackage="mbg.test.mb3.generated.mysql.model" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <!--mapper  xml-->
+    <sqlMapGenerator targetPackage="mbg.test.mb3.generated.mysql.xml"  targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <!--mapper接口-->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="mbg.test.mb3.generated.mysql.mapper" targetProject="src/main/java">
+      <!--<property name="enableSubPackages" value="true"/>-->
+      <!-- 参考javaClientGenerator 的  rootInterface 属性-->
+      <!--<property name="rootInterface" value="BaseDao"/>-->
+    </javaClientGenerator>
+
+    <table schema="" tableName="practice_frame_tag" selectByPrimaryKeyQueryId="true"
+           enableSelectByPrimaryKey="true" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true"
+           enableInsert="true" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+           enableSelectByExample="true" selectByExampleQueryId="true">
+      <property name="useActualColumnNames" value="false"/>
+      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+      <domainObjectRenamingRule searchString="^Practice" replaceString=""/>
+    </table>
+  </context>
+
+</generatorConfiguration>
