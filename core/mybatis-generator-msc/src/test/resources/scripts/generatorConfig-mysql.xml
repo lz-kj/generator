@@ -42,7 +42,7 @@
     <!-- XML 直接覆盖的插件 -->
     <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
     <!-- 自定义BaseMapper插件 -->
-    <plugin type="org.mybatis.generator.plugins.base.BaseMapperPlugin" />
+    <plugin type="org.mybatis.generator.plugins.base.mapper.BaseMapperPlugin" />
     <!-- 自定义注解格式 -->
     <commentGenerator type="org.mybatis.generator.internal.MysqlCommentGenerator">
       <!--<property name="suppressAllComments" value="true" />-->

@@ -1,4 +1,4 @@
-package org.mybatis.generator.plugins.base;
+package org.mybatis.generator.plugins.base.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;

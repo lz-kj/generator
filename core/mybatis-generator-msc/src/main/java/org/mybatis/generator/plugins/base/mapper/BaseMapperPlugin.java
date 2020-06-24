@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.generator.plugins.base;
+package org.mybatis.generator.plugins.base.mapper;
 
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -76,7 +76,7 @@ public class BaseMapperPlugin extends PluginAdapter {
                 break;
         }
         baseMapper.append(">");
-        String baseMapperImport = "org.mybatis.generator.plugins.base.BaseMapper";
+        String baseMapperImport = "org.mybatis.generator.plugins.base.mapper.BaseMapper";
         FullyQualifiedJavaType clsBaseMapper = new FullyQualifiedJavaType(baseMapper.toString());
         FullyQualifiedJavaType impBaseMapper = new FullyQualifiedJavaType(baseMapperImport);
         interfaze.addSuperInterface(clsBaseMapper);
