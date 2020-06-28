@@ -301,6 +301,8 @@
     <module>mybatis-generator-systests-mybatis3</module>
     <module>mybatis-generator-systests-mybatis3-java8</module>
     <module>mybatis-generator-systests-kotlin</module>
+    <module>mybatis-generator-msc</module>
+    <module>mybatis-generator-backstage</module>
   </modules>
 
   <profiles>

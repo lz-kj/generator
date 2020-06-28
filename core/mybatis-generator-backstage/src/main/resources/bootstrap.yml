@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: backstage
+server:
+  port: 8111
+

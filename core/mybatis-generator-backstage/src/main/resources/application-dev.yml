@@ -1,0 +1,75 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.0.161:3306/practice?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 1qazXSW@
+    #连接池的配置信息
+    druid:
+      username: root
+      password: 1qazXSW@
+      initial-size: 10
+      max-active: 100
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 2000
+          enabled: true
+        config:
+          enabled: true
+        wall:
+          enabled: true
+        encoding:
+          enabled: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+
+eureka:
+  client:
+    # 客户端进行Eureka注册的配置
+    register-with-eureka: false
+    #eureka client刷新本地缓存时间
+#    registryFetchIntervalSeconds: 5
+    #表示表示是否从EurekaServer获取注册信息，默认为true。单节点不需要同步其他的EurekaServer节点的数据
+    fetch-registry: true
+    service-url:
+      defaultZone: http://192.168.0.161:8200/eureka/
+  instance:
+    status-page-url-path: /swagger-ui.html
+    hostname: 127.0.0.1
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 60 # 设置心跳的时间间隔（默认是30秒）
+#    lease-expiration-duration-in-seconds: 5  # 如果超过了5秒的间隔（默认是90秒）
+#    health-check-url-path: /health
+#    home-page-url-path: /
+#    metadata-map.cluster: police-practice
+
+
+SWAGGER:
+   ENABLE: true
+
+interceptor:
+  urls: /swagger-resources/**,/swagger/**,/null/**,/swagger-ui.html,/swagger-ui.html/**,/error/**
+
+#设置日志级别
+logging:
+  level:
+    root: info
+    #设置使用日志路径
+  config: classpath:log4j2.yml
+
+mybatis:
+  type-aliases-package: cn.com.lz.generator.backstage.model
+  mapper-locations: classpath:mapper/**/*.xml
+  configLocation: classpath:mybatis.xml

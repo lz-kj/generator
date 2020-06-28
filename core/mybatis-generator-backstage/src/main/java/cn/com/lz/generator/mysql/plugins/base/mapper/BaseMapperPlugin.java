@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2020 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.generator.plugins.base;
+package cn.com.lz.generator.mysql.plugins.base.mapper;
 
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -64,19 +64,19 @@ public class BaseMapperPlugin extends PluginAdapter {
                 break;
             case Types.INTEGER:
                 baseMapper.append(Integer.class.getSimpleName());
-                String intImport = Long.class.getName();
+                String intImport = Integer.class.getName();
                 FullyQualifiedJavaType intType = new FullyQualifiedJavaType(intImport);
                 interfaze.addImportedType(intType);
                 break;
             case Types.VARCHAR:
                 baseMapper.append(String.class.getSimpleName());
-                String strImport = Long.class.getName();
+                String strImport = String.class.getName();
                 FullyQualifiedJavaType strType = new FullyQualifiedJavaType(strImport);
                 interfaze.addImportedType(strType);
                 break;
         }
         baseMapper.append(">");
-        String baseMapperImport = "org.mybatis.generator.plugins.base.BaseMapper";
+        String baseMapperImport = "cn.com.lz.generator.mysql.plugins.base.mapper.BaseMapper";
         FullyQualifiedJavaType clsBaseMapper = new FullyQualifiedJavaType(baseMapper.toString());
         FullyQualifiedJavaType impBaseMapper = new FullyQualifiedJavaType(baseMapperImport);
         interfaze.addSuperInterface(clsBaseMapper);
