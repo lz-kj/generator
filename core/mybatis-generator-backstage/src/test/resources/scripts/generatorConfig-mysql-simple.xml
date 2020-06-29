@@ -7,8 +7,7 @@
 <generatorConfiguration>
   <properties resource="scripts/database.properties"/>
   <classPathEntry location="${user.home}/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
-
-  <context id="MysqlTables" defaultModelType="flat" targetRuntime="MyBatis3">
+  <context id="my" defaultModelType="flat" targetRuntime="MyBatis3Simple">
     <!-- 遇到sql关键字添加转义 -->
     <property name="autoDelimitKeywords" value="true"/>
     <property name="beginningDelimiter" value="`"/>
@@ -33,8 +32,6 @@
       <!--<property name="suppressAllComments" value="true" />-->
       <property name="addRemarkComments" value="true"/>
     </commentGenerator>
-
-
 
     <jdbcConnection driverClass="${mysql.driver.class}"
                     connectionURL="${mysql.database.url}"

@@ -41,7 +41,23 @@ public class MysqlGeneratorTest {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testSimple()throws Exception {
+        try{
+            List<String> warnings = new ArrayList<String>();
+            boolean overwrite = true;
+            String xml = "/scripts/generatorConfig-mysql-simple.xml";
+//        File configFile = new File(xml);
+            ConfigurationParser cp = new ConfigurationParser(warnings);
+            Configuration config = cp.parseConfiguration(MysqlGeneratorTest.class.getResourceAsStream(xml));
+            DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+            MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+            myBatisGenerator.generate(null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Test

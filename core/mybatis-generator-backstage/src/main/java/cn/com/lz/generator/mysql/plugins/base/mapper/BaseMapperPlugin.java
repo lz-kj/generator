@@ -48,11 +48,11 @@ public class BaseMapperPlugin extends PluginAdapter {
 
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
-
+        String exampleImport = introspectedTable.getExampleType();
         StringBuilder baseMapper = new StringBuilder("BaseMapper<");
         baseMapper.append(introspectedTable.getBaseRecordType());
         baseMapper.append(",");
-        baseMapper.append(introspectedTable.getExampleType());
+        baseMapper.append(exampleImport.substring(exampleImport.lastIndexOf(".")+1));
         baseMapper.append(",");
         int dbType = introspectedTable.getPrimaryKeyColumns().get(0).getJdbcType();
         switch (dbType){
@@ -76,11 +76,13 @@ public class BaseMapperPlugin extends PluginAdapter {
                 break;
         }
         baseMapper.append(">");
-        String baseMapperImport = "cn.com.lz.generator.mysql.plugins.base.mapper.BaseMapper";
         FullyQualifiedJavaType clsBaseMapper = new FullyQualifiedJavaType(baseMapper.toString());
-        FullyQualifiedJavaType impBaseMapper = new FullyQualifiedJavaType(baseMapperImport);
         interfaze.addSuperInterface(clsBaseMapper);
+        String baseMapperImport = "cn.com.lz.generator.mysql.plugins.base.mapper.BaseMapper";
+        FullyQualifiedJavaType impBaseMapper = new FullyQualifiedJavaType(baseMapperImport);
         interfaze.addImportedType(impBaseMapper);
+        FullyQualifiedJavaType impExample = new FullyQualifiedJavaType(exampleImport);
+        interfaze.addImportedType(impExample);
         //去掉方法
         interfaze.getMethods().clear();
         //去掉注解
