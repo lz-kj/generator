@@ -43,7 +43,8 @@
     <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
     <!-- 自定义BaseMapper插件 -->
     <plugin type="cn.com.lz.generator.mysql.plugins.base.mapper.BaseMapperPlugin" />
-
+    <!-- 自定义BaseService插件 -->
+    <plugin type="cn.com.lz.generator.mysql.plugins.base.service.BaseServicePlugin" />
     <!-- 自定义注解格式 -->
     <commentGenerator type="cn.com.lz.generator.mysql.internal.MysqlCommentGenerator">
       <!--<property name="suppressAllComments" value="true" />-->
@@ -81,6 +82,10 @@
       <!-- 参考javaClientGenerator 的  rootInterface 属性-->
       <!--<property name="rootInterface" value="BaseDao"/>-->
     </javaClientGenerator>
+
+    <!--mapper接口-->
+    <serviceGenerator type="SERVICE_INTERFACE" targetPackage="cn.com.lz.generator.backstage.service" targetProject="src/main/java">
+    </serviceGenerator>
 
     <table schema="" tableName="practice_frame_tag" selectByPrimaryKeyQueryId="true"
            enableSelectByPrimaryKey="true" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true"

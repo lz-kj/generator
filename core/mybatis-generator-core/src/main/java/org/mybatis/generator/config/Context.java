@@ -59,6 +59,8 @@ public class Context extends PropertyHolder {
 
     private JavaClientGeneratorConfiguration javaClientGeneratorConfiguration;
 
+    private ServiceGeneratorConfiguration serviceGeneratorConfiguration;
+
     private ArrayList<TableConfiguration> tableConfigurations;
 
     private ModelType defaultModelType;
@@ -86,7 +88,7 @@ public class Context extends PropertyHolder {
     private KotlinFormatter kotlinFormatter;
 
     private XmlFormatter xmlFormatter;
-    
+
     private boolean isJava8Targeted = true;
 
     public Context(ModelType defaultModelType) {
@@ -112,6 +114,10 @@ public class Context extends PropertyHolder {
 
     public JavaClientGeneratorConfiguration getJavaClientGeneratorConfiguration() {
         return javaClientGeneratorConfiguration;
+    }
+
+    public ServiceGeneratorConfiguration getServiceGeneratorConfiguration() {
+        return serviceGeneratorConfiguration;
     }
 
     public JavaModelGeneratorConfiguration getJavaModelGeneratorConfiguration() {
@@ -165,6 +171,10 @@ public class Context extends PropertyHolder {
             javaClientGeneratorConfiguration.validate(errors, id);
         }
 
+        if (serviceGeneratorConfiguration != null) {
+            serviceGeneratorConfiguration.validate(errors, id);
+        }
+
         IntrospectedTable it = null;
         try {
             it = ObjectFactory.createIntrospectedTableForValidation(this);
@@ -206,6 +216,11 @@ public class Context extends PropertyHolder {
     public void setJavaClientGeneratorConfiguration(
             JavaClientGeneratorConfiguration javaClientGeneratorConfiguration) {
         this.javaClientGeneratorConfiguration = javaClientGeneratorConfiguration;
+    }
+
+    public void setServiceGeneratorConfiguration(
+            ServiceGeneratorConfiguration serviceGeneratorConfiguration) {
+        this.serviceGeneratorConfiguration = serviceGeneratorConfiguration;
     }
 
     public void setJavaModelGeneratorConfiguration(
@@ -333,11 +348,11 @@ public class Context extends PropertyHolder {
     //
 
     private List<IntrospectedTable> introspectedTables = new ArrayList<>();
-    
+
     /**
      * This method could be useful for users that use the library for introspection only
      * and not for code generation.
-     * 
+     *
      * @return a list containing the results of table introspection. The list will be empty
      *     if this method is called before introspectTables(), or if no tables are found that
      *     match the configuration
@@ -363,7 +378,7 @@ public class Context extends PropertyHolder {
     /**
      * Introspect tables based on the configuration specified in the
      * constructor. This method is long running.
-     * 
+     *
      * @param callback
      *            a progress callback if progress information is desired, or
      *            <code>null</code>
@@ -377,7 +392,7 @@ public class Context extends PropertyHolder {
      *            "bar", then the fully qualified table name is "foo.bar". If
      *            the Set is null or empty, then all tables in the configuration
      *            will be used for code generation.
-     * 
+     *
      * @throws SQLException
      *             if some error arises while introspecting the specified
      *             database tables.
@@ -441,6 +456,15 @@ public class Context extends PropertyHolder {
         return steps;
     }
 
+    /**
+     * 读取配置文件转换成实体类
+     * @param callback
+     * @param generatedJavaFiles
+     * @param generatedXmlFiles
+     * @param generatedKotlinFiles
+     * @param warnings
+     * @throws InterruptedException
+     */
     public void generateFiles(ProgressCallback callback,
             List<GeneratedJavaFile> generatedJavaFiles,
             List<GeneratedXmlFile> generatedXmlFiles,
