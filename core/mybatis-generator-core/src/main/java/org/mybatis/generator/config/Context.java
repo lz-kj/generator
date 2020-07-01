@@ -38,6 +38,10 @@ import org.mybatis.generator.api.KotlinFormatter;
 import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.api.XmlFormatter;
+import org.mybatis.generator.config.controller.query.JavaQueryGeneratorConfiguration;
+import org.mybatis.generator.config.controller.req.JavaReqGeneratorConfiguration;
+import org.mybatis.generator.config.controller.vo.JavaVoGeneratorConfiguration;
+import org.mybatis.generator.config.service.ServiceGeneratorConfiguration;
 import org.mybatis.generator.internal.JDBCConnectionFactory;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.PluginAggregator;
@@ -56,6 +60,12 @@ public class Context extends PropertyHolder {
     private JavaTypeResolverConfiguration javaTypeResolverConfiguration;
 
     private JavaModelGeneratorConfiguration javaModelGeneratorConfiguration;
+
+    private JavaVoGeneratorConfiguration javaVoGeneratorConfiguration;
+
+    private JavaReqGeneratorConfiguration javaReqGeneratorConfiguration;
+
+    private JavaQueryGeneratorConfiguration javaQueryGeneratorConfiguration;
 
     private JavaClientGeneratorConfiguration javaClientGeneratorConfiguration;
 
@@ -124,6 +134,18 @@ public class Context extends PropertyHolder {
         return javaModelGeneratorConfiguration;
     }
 
+    public JavaVoGeneratorConfiguration getJavaVoGeneratorConfiguration() {
+        return javaVoGeneratorConfiguration;
+    }
+
+    public JavaReqGeneratorConfiguration getJavaReqGeneratorConfiguration() {
+        return javaReqGeneratorConfiguration;
+    }
+
+    public JavaQueryGeneratorConfiguration getJavaQueryGeneratorConfiguration() {
+        return javaQueryGeneratorConfiguration;
+    }
+
     public JavaTypeResolverConfiguration getJavaTypeResolverConfiguration() {
         return javaTypeResolverConfiguration;
     }
@@ -165,6 +187,24 @@ public class Context extends PropertyHolder {
             errors.add(getString("ValidationError.8", id)); //$NON-NLS-1$
         } else {
             javaModelGeneratorConfiguration.validate(errors, id);
+        }
+        //Vo 校验
+        if (javaVoGeneratorConfiguration == null) {
+            errors.add(getString("ValidationError.8", id)); //$NON-NLS-1$
+        } else {
+            javaVoGeneratorConfiguration.validate(errors, id);
+        }
+        //Req 校验
+        if (javaReqGeneratorConfiguration == null) {
+            errors.add(getString("ValidationError.8", id)); //$NON-NLS-1$
+        } else {
+            javaReqGeneratorConfiguration.validate(errors, id);
+        }
+        //Query 校验
+        if (javaQueryGeneratorConfiguration == null) {
+            errors.add(getString("ValidationError.8", id)); //$NON-NLS-1$
+        } else {
+            javaQueryGeneratorConfiguration.validate(errors, id);
         }
 
         if (javaClientGeneratorConfiguration != null) {
@@ -226,6 +266,18 @@ public class Context extends PropertyHolder {
     public void setJavaModelGeneratorConfiguration(
             JavaModelGeneratorConfiguration javaModelGeneratorConfiguration) {
         this.javaModelGeneratorConfiguration = javaModelGeneratorConfiguration;
+    }
+
+    public void setJavaVoGeneratorConfiguration(JavaVoGeneratorConfiguration javaVoGeneratorConfiguration) {
+        this.javaVoGeneratorConfiguration = javaVoGeneratorConfiguration;
+    }
+
+    public void setJavaReqGeneratorConfiguration(JavaReqGeneratorConfiguration javaReqGeneratorConfiguration) {
+        this.javaReqGeneratorConfiguration = javaReqGeneratorConfiguration;
+    }
+
+    public void setJavaQueryGeneratorConfiguration(JavaQueryGeneratorConfiguration javaQueryGeneratorConfiguration) {
+        this.javaQueryGeneratorConfiguration = javaQueryGeneratorConfiguration;
     }
 
     public void setJavaTypeResolverConfiguration(

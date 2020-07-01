@@ -8,7 +8,7 @@ import java.util.Date;
 public class Vo implements Serializable {
 
     @ApiModelProperty("主键ID")
-    private String id;
+    private Long id;
 
     @ApiModelProperty("创建时间")
     private Date createTime;
@@ -32,11 +32,11 @@ public class Vo implements Serializable {
         this.modifyTime = modifyTime;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

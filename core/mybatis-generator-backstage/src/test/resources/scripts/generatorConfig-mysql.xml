@@ -52,8 +52,26 @@
     <javaModelGenerator targetPackage="cn.com.lz.generator.backstage.model" targetProject="src/main/java">
       <property name="enableSubPackages" value="true" />
       <property name="trimStrings" value="true" />
-      <property name="rootClass" value="cn.com.lz.generator.mysql.plugins.base.controller.vo.Vo"/>
     </javaModelGenerator>
+
+    <!--  实体类 Vo -->
+    <javaVoGenerator targetPackage="cn.com.lz.generator.backstage.controller.vo" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootClass" value="cn.com.lz.generator.mysql.plugins.base.controller.vo.Vo"/>
+    </javaVoGenerator>
+    <!--  实体类 Req -->
+    <javaReqGenerator targetPackage="cn.com.lz.generator.backstage.controller.req" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootClass" value="cn.com.lz.generator.mysql.plugins.base.controller.req.Req"/>
+    </javaReqGenerator>
+    <!--  实体类 Query -->
+    <javaQueryGenerator targetPackage="cn.com.lz.generator.backstage.controller.query" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootClass" value="cn.com.lz.generator.mysql.plugins.base.controller.query.Query"/>
+    </javaQueryGenerator>
 
     <!--mapper  xml-->
     <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">

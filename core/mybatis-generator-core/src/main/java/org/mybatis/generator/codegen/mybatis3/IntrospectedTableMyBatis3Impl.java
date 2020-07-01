@@ -32,6 +32,9 @@ import org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedClientGenerato
 import org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.*;
+import org.mybatis.generator.codegen.mybatis3.model.query.QueryGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.req.ReqGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.vo.VoGenerator;
 import org.mybatis.generator.codegen.mybatis3.service.ServiceInterfaceGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
@@ -59,6 +62,9 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public void calculateGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
         calculateJavaModelGenerators(warnings, progressCallback);
+        calculateJavaVoGenerators(warnings, progressCallback);
+        calculateJavaReqGenerators(warnings, progressCallback);
+        calculateJavaQueryGenerators(warnings, progressCallback);
 
         AbstractJavaClientGenerator javaClientGenerator =
                 calculateClientGenerators(warnings, progressCallback);
@@ -200,6 +206,33 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         }
     }
 
+    protected void calculateJavaVoGenerators(List<String> warnings,
+                                                ProgressCallback progressCallback) {
+
+        AbstractJavaGenerator javaGenerator = new VoGenerator(getVoProject());
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaGenerators.add(javaGenerator);
+    }
+
+    protected void calculateJavaReqGenerators(List<String> warnings,
+                                             ProgressCallback progressCallback) {
+
+        AbstractJavaGenerator javaGenerator = new ReqGenerator(getReqProject());
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaGenerators.add(javaGenerator);
+    }
+
+    protected void calculateJavaQueryGenerators(List<String> warnings,
+                                              ProgressCallback progressCallback) {
+
+        AbstractJavaGenerator javaGenerator = new QueryGenerator(getQueryProject());
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaGenerators.add(javaGenerator);
+    }
+
     protected void initializeAbstractGenerator(
             AbstractGenerator abstractGenerator, List<String> warnings,
             ProgressCallback progressCallback) {
@@ -262,7 +295,19 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         return context.getJavaModelGeneratorConfiguration().getTargetProject();
     }
 
-    protected String getExampleProject() {
+    protected String getVoProject() {
+        return context.getJavaVoGeneratorConfiguration().getTargetProject();
+    }
+
+    protected String getReqProject() {
+        return context.getJavaReqGeneratorConfiguration().getTargetProject();
+    }
+
+    protected String getQueryProject() {
+        return context.getJavaQueryGeneratorConfiguration().getTargetProject();
+
+    }
+        protected String getExampleProject() {
         String project = context.getJavaModelGeneratorConfiguration().getProperty(
                 PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PROJECT);
 

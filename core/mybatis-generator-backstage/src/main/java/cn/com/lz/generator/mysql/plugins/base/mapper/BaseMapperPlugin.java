@@ -52,6 +52,7 @@ public class BaseMapperPlugin extends PluginAdapter {
         StringBuilder baseMapper = new StringBuilder("BaseMapper<");
         baseMapper.append(introspectedTable.getBaseRecordType());
         baseMapper.append(",");
+
         baseMapper.append(exampleImport.substring(exampleImport.lastIndexOf(".")+1));
         baseMapper.append(",");
         int dbType = introspectedTable.getPrimaryKeyColumns().get(0).getJdbcType();

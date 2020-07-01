@@ -51,7 +51,8 @@
   tables.
 -->
 <!ELEMENT context (property*, plugin*, commentGenerator?, (connectionFactory | jdbcConnection), javaTypeResolver?,
-        javaModelGenerator, sqlMapGenerator?, javaClientGenerator?, serviceGenerator?, table+)>
+        javaModelGenerator, javaVoGenerator, javaReqGenerator, javaQueryGenerator,
+        sqlMapGenerator?, javaClientGenerator?, serviceGenerator?, table+)>
 <!ATTLIST context id ID #REQUIRED
         defaultModelType CDATA #IMPLIED
         targetRuntime CDATA #IMPLIED
@@ -113,6 +114,22 @@
         targetPackage CDATA #REQUIRED
         targetProject CDATA #REQUIRED>
 
+<!-- 定义VO 的校验 -->
+<!ELEMENT javaVoGenerator (property*)>
+<!ATTLIST javaVoGenerator
+        targetPackage CDATA #REQUIRED
+        targetProject CDATA #REQUIRED>
+
+<!-- 定义Req 的校验 -->
+<!ELEMENT javaReqGenerator (property*)>
+<!ATTLIST javaReqGenerator
+        targetPackage CDATA #REQUIRED
+        targetProject CDATA #REQUIRED>
+<!-- 定义Query 的校验 -->
+<!ELEMENT javaQueryGenerator (property*)>
+<!ATTLIST javaQueryGenerator
+        targetPackage CDATA #REQUIRED
+        targetProject CDATA #REQUIRED>
 <!--
   The javaTypeResolver element is used to define properties of the Java Type Resolver.
   The Java Type Resolver is used to calculate Java types from database column information.

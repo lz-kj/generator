@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2019 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,18 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.generator.config;
+package org.mybatis.generator.config.controller.vo;
+
+import org.mybatis.generator.config.PropertyHolder;
 
 import java.util.List;
 
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
-public class ServiceGeneratorConfiguration extends TypedPropertyHolder {
+public class JavaVoGeneratorConfiguration extends PropertyHolder {
+
     private String targetPackage;
+
     private String targetProject;
 
-    public ServiceGeneratorConfiguration() {
+    public JavaVoGeneratorConfiguration() {
         super();
     }
 
@@ -46,12 +50,12 @@ public class ServiceGeneratorConfiguration extends TypedPropertyHolder {
 
     public void validate(List<String> errors, String contextId) {
         if (!stringHasValue(targetProject)) {
-            errors.add(getString("ValidationError.2", contextId)); //$NON-NLS-1$
+            errors.add(getString("ValidationError.0", contextId)); //$NON-NLS-1$
         }
 
         if (!stringHasValue(targetPackage)) {
             errors.add(getString("ValidationError.12", //$NON-NLS-1$
-                    "javaClientGenerator", contextId)); //$NON-NLS-1$
+                    "JavaModelGenerator", contextId)); //$NON-NLS-1$
         }
     }
 }

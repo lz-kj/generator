@@ -12,7 +12,7 @@ public class Req implements Serializable {
 
     @ApiModelProperty("id")
 //    @JsonIgnore
-    private String id;
+    private Long id;
 
     @JsonIgnore
     @ApiParam(hidden = true)
@@ -28,11 +28,11 @@ public class Req implements Serializable {
     @JsonIgnore
     private Boolean del = false;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

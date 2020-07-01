@@ -31,6 +31,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.mybatis.generator.config.*;
+import org.mybatis.generator.config.controller.query.JavaQueryGeneratorConfiguration;
+import org.mybatis.generator.config.controller.req.JavaReqGeneratorConfiguration;
+import org.mybatis.generator.config.controller.vo.JavaVoGeneratorConfiguration;
+import org.mybatis.generator.config.service.ServiceGeneratorConfiguration;
 import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
@@ -54,6 +58,9 @@ public abstract class IntrospectedTable {
     protected enum InternalAttribute {
         ATTR_PRIMARY_KEY_TYPE,
         ATTR_BASE_RECORD_TYPE,
+        ATTR_VO_RECORD_TYPE,
+        ATTR_REQ_RECORD_TYPE,
+        ATTR_QUERY_RECORD_TYPE,
         ATTR_RECORD_WITH_BLOBS_TYPE,
         ATTR_EXAMPLE_TYPE,
         ATTR_MYBATIS3_XML_MAPPER_PACKAGE,
@@ -273,6 +280,18 @@ public abstract class IntrospectedTable {
         return internalAttributes.get(InternalAttribute.ATTR_BASE_RECORD_TYPE);
     }
 
+    public String getVoRecordType() {
+        return internalAttributes.get(InternalAttribute.ATTR_VO_RECORD_TYPE);
+    }
+
+    public String getReqRecordType() {
+        return internalAttributes.get(InternalAttribute.ATTR_REQ_RECORD_TYPE);
+    }
+
+    public String getQueryRecordType() {
+        return internalAttributes.get(InternalAttribute.ATTR_QUERY_RECORD_TYPE);
+    }
+
     public String getKotlinRecordType() {
         return internalAttributes.get(InternalAttribute.ATTR_KOTLIN_RECORD_TYPE);
     }
@@ -381,6 +400,9 @@ public abstract class IntrospectedTable {
         calculateJavaClientAttributes();
         calculateServiceAttributes();
         calculateModelAttributes();
+        calculateVoAttributes();
+        calculateReqAttributes();
+        calculateQueryAttributes();
         calculateXmlAttributes();
 
         if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
@@ -782,6 +804,39 @@ public abstract class IntrospectedTable {
         return sb.toString();
     }
 
+    protected String calculateJavaVoPackage() {
+        JavaVoGeneratorConfiguration config = context
+                .getJavaVoGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
+
+    protected String calculateJavaReqPackage() {
+        JavaReqGeneratorConfiguration config = context
+                .getJavaReqGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
+
+    protected String calculateJavaQueryPackage() {
+        JavaQueryGeneratorConfiguration config = context
+                .getJavaQueryGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
+
     protected void calculateModelAttributes() {
         String pakkage = calculateJavaModelPackage();
 
@@ -819,6 +874,45 @@ public abstract class IntrospectedTable {
         sb.append(fullyQualifiedTable.getDomainObjectName());
         sb.append("Example"); //$NON-NLS-1$
         setExampleType(sb.toString());
+    }
+
+    /**
+     * 推测属性命名
+     */
+    protected void calculateVoAttributes() {
+        String pakkage = calculateJavaVoPackage();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        setVoRecordType(sb.toString());
+    }
+
+    /**
+     * 推测属性命名
+     */
+    protected void calculateReqAttributes() {
+        String pakkage = calculateJavaReqPackage();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        setReqRecordType(sb.toString());
+    }
+
+    /**
+     * 推测属性命名
+     */
+    protected void calculateQueryAttributes() {
+        String pakkage = calculateJavaQueryPackage();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        setQueryRecordType(sb.toString());
     }
 
     /**
@@ -983,6 +1077,22 @@ public abstract class IntrospectedTable {
         internalAttributes.put(InternalAttribute.ATTR_BASE_RECORD_TYPE,
                 baseRecordType);
     }
+
+    public void setVoRecordType(String baseRecordType) {
+        internalAttributes.put(InternalAttribute.ATTR_VO_RECORD_TYPE,
+                baseRecordType);
+    }
+
+    public void setReqRecordType(String baseRecordType) {
+        internalAttributes.put(InternalAttribute.ATTR_REQ_RECORD_TYPE,
+                baseRecordType);
+    }
+
+    public void setQueryRecordType(String baseRecordType) {
+        internalAttributes.put(InternalAttribute.ATTR_QUERY_RECORD_TYPE,
+                baseRecordType);
+    }
+
 
     public void setKotlinRecordType(String kotlinRecordType) {
         internalAttributes.put(InternalAttribute.ATTR_KOTLIN_RECORD_TYPE,

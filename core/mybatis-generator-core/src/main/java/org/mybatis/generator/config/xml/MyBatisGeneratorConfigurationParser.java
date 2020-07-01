@@ -28,6 +28,10 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.mybatis.generator.config.*;
+import org.mybatis.generator.config.controller.query.JavaQueryGeneratorConfiguration;
+import org.mybatis.generator.config.controller.req.JavaReqGeneratorConfiguration;
+import org.mybatis.generator.config.controller.vo.JavaVoGeneratorConfiguration;
+import org.mybatis.generator.config.service.ServiceGeneratorConfiguration;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.w3c.dom.Element;
@@ -172,6 +176,12 @@ public class MyBatisGeneratorConfigurationParser {
                 parseConnectionFactory(context, childNode);
             } else if ("javaModelGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseJavaModelGenerator(context, childNode);
+            } else if ("javaVoGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseJavaVoGenerator(context, childNode);
+            } else if ("javaReqGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseJavaReqGenerator(context, childNode);
+            } else if ("javaQueryGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseJavaQueryGenerator(context, childNode);
             } else if ("javaTypeResolver".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseJavaTypeResolver(context, childNode);
             } else if ("sqlMapGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
@@ -571,6 +581,84 @@ public class MyBatisGeneratorConfigurationParser {
         JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = new JavaModelGeneratorConfiguration();
 
         context.setJavaModelGeneratorConfiguration(javaModelGeneratorConfiguration);
+
+        Properties attributes = parseAttributes(node);
+        String targetPackage = attributes.getProperty("targetPackage"); //$NON-NLS-1$
+        String targetProject = attributes.getProperty("targetProject"); //$NON-NLS-1$
+
+        javaModelGeneratorConfiguration.setTargetPackage(targetPackage);
+        javaModelGeneratorConfiguration.setTargetProject(targetProject);
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node childNode = nodeList.item(i);
+
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseProperty(javaModelGeneratorConfiguration, childNode);
+            }
+        }
+    }
+
+    protected void parseJavaVoGenerator(Context context, Node node) {
+        JavaVoGeneratorConfiguration javaModelGeneratorConfiguration = new JavaVoGeneratorConfiguration();
+
+        context.setJavaVoGeneratorConfiguration(javaModelGeneratorConfiguration);
+
+        Properties attributes = parseAttributes(node);
+        String targetPackage = attributes.getProperty("targetPackage"); //$NON-NLS-1$
+        String targetProject = attributes.getProperty("targetProject"); //$NON-NLS-1$
+
+        javaModelGeneratorConfiguration.setTargetPackage(targetPackage);
+        javaModelGeneratorConfiguration.setTargetProject(targetProject);
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node childNode = nodeList.item(i);
+
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseProperty(javaModelGeneratorConfiguration, childNode);
+            }
+        }
+    }
+
+    protected void parseJavaReqGenerator(Context context, Node node) {
+        JavaReqGeneratorConfiguration javaModelGeneratorConfiguration = new JavaReqGeneratorConfiguration();
+
+        context.setJavaReqGeneratorConfiguration(javaModelGeneratorConfiguration);
+
+        Properties attributes = parseAttributes(node);
+        String targetPackage = attributes.getProperty("targetPackage"); //$NON-NLS-1$
+        String targetProject = attributes.getProperty("targetProject"); //$NON-NLS-1$
+
+        javaModelGeneratorConfiguration.setTargetPackage(targetPackage);
+        javaModelGeneratorConfiguration.setTargetProject(targetProject);
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node childNode = nodeList.item(i);
+
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseProperty(javaModelGeneratorConfiguration, childNode);
+            }
+        }
+    }
+
+    protected void parseJavaQueryGenerator(Context context, Node node) {
+        JavaQueryGeneratorConfiguration javaModelGeneratorConfiguration = new JavaQueryGeneratorConfiguration();
+
+        context.setJavaQueryGeneratorConfiguration(javaModelGeneratorConfiguration);
 
         Properties attributes = parseAttributes(node);
         String targetPackage = attributes.getProperty("targetPackage"); //$NON-NLS-1$

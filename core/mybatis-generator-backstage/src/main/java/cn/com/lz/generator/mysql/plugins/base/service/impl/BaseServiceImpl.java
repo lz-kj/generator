@@ -57,7 +57,7 @@ public abstract class BaseServiceImpl<Model> implements BaseService<Vo, Req, Que
     @Override
     public int insert(Req req) throws Exception {
         Object model = m.newInstance();
-        req.setId(IDUtil.getUUID());
+//        req.setId(IDUtil.getUUID());
         req.setCreateTime(new Date());
         BeanUtils.copyProperties(req,model);
         int result = this.getMapper().insert(model);
@@ -68,7 +68,7 @@ public abstract class BaseServiceImpl<Model> implements BaseService<Vo, Req, Que
     @Override
     public int insertSelective(Req req) throws Exception {
         Object model = m.newInstance();
-        req.setId(IDUtil.getUUID());
+//        req.setId(IDUtil.getUUID());
         req.setCreateTime(new Date());
         BeanUtils.copyProperties(req,model);
         int result = this.getMapper().insertSelective(model);
