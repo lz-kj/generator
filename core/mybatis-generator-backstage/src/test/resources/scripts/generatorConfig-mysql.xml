@@ -28,6 +28,8 @@
     <plugin type="cn.com.lz.generator.mysql.plugins.base.mapper.BaseMapperPlugin" />
     <!-- 自定义BaseService插件 -->
     <plugin type="cn.com.lz.generator.mysql.plugins.base.service.BaseServicePlugin" />
+    <!-- 自定义serviceImpl插件 -->
+    <plugin type="cn.com.lz.generator.mysql.plugins.base.service.impl.BaseServiceImplPlugin" />
     <!-- 自定义注解格式 -->
     <commentGenerator type="cn.com.lz.generator.mysql.internal.MysqlCommentGenerator">
       <!--<property name="suppressAllComments" value="true" />-->

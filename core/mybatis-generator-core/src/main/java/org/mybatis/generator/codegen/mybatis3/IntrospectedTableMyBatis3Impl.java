@@ -35,6 +35,7 @@ import org.mybatis.generator.codegen.mybatis3.model.*;
 import org.mybatis.generator.codegen.mybatis3.model.query.QueryGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.req.ReqGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.vo.VoGenerator;
+import org.mybatis.generator.codegen.mybatis3.service.ServiceImplGenerator;
 import org.mybatis.generator.codegen.mybatis3.service.ServiceInterfaceGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
@@ -122,6 +123,18 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
         javaGenerators.add(javaGenerator);
 
+        //创建implGenerator
+        createServiceImplGenerator(warnings,progressCallback);
+
+        return javaGenerator;
+    }
+
+    protected AbstractJavaGenerator createServiceImplGenerator(List<String> warnings,
+                                                               ProgressCallback progressCallback){
+        AbstractJavaGenerator javaGenerator = new ServiceImplGenerator(getServiceImplProject());
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaGenerators.add(javaGenerator);
         return javaGenerator;
     }
 
@@ -291,6 +304,10 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         return context.getServiceGeneratorConfiguration().getTargetProject();
     }
 
+    protected String getServiceImplProject() {
+        return context.getServiceGeneratorConfiguration().getTargetProject();
+    }
+
     protected String getModelProject() {
         return context.getJavaModelGeneratorConfiguration().getTargetProject();
     }
@@ -307,7 +324,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         return context.getJavaQueryGeneratorConfiguration().getTargetProject();
 
     }
-        protected String getExampleProject() {
+    protected String getExampleProject() {
         String project = context.getJavaModelGeneratorConfiguration().getProperty(
                 PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PROJECT);
 

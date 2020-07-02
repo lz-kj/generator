@@ -211,6 +211,15 @@ public interface Plugin {
     boolean serviceGenerated(Interface interfaze, IntrospectedTable introspectedTable);
 
     /**
+     * serviceImpl 插件
+     * @param topLevelClass
+     * @param introspectedTable
+     * @return
+     */
+    boolean serviceImplGenerated(TopLevelClass topLevelClass,
+                                 IntrospectedTable introspectedTable);
+
+    /**
      * This method is called when the count method has been generated for the mapper interface.
      * This method is only called in the MyBatis3DynamicSql runtime.
      *

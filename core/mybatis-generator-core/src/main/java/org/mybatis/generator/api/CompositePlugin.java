@@ -143,6 +143,17 @@ public abstract class CompositePlugin implements Plugin {
     }
 
     @Override
+    public boolean serviceImplGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        for (Plugin plugin : plugins) {
+            if (!plugin.serviceImplGenerated(topLevelClass, introspectedTable)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean clientBasicCountMethodGenerated(Method method, Interface interfaze,
             IntrospectedTable introspectedTable) {
         for (Plugin plugin : plugins) {

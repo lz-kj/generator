@@ -206,6 +206,12 @@ public abstract class PluginAdapter implements Plugin {
     }
 
     @Override
+    public boolean serviceImplGenerated(TopLevelClass topLevelClass,
+                                        IntrospectedTable introspectedTable) {
+        return true;
+    }
+
+    @Override
     public boolean clientSelectByExampleWithBLOBsMethodGenerated(Method method,
             Interface interfaze, IntrospectedTable introspectedTable) {
         return true;
