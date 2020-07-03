@@ -833,6 +833,7 @@ public abstract class IntrospectedTable {
         ServiceGeneratorConfiguration config = context.getServiceGeneratorConfiguration();
         StringBuilder sb = new StringBuilder();
         sb.append(config.getTargetPackage());
+        sb.append(".impl");
         sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
         return sb.toString();
     }

@@ -98,13 +98,13 @@
     <controllerGenerator type="CONTROLLER" targetPackage="cn.com.lz.generator.backstage.controller" targetProject="src/main/java">
     </controllerGenerator>
 
-    <table schema="" tableName="practice_frame_tag" selectByPrimaryKeyQueryId="true"
+    <table schema="" tableName="%" selectByPrimaryKeyQueryId="true"
            enableSelectByPrimaryKey="true" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true"
            enableInsert="true" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
            enableSelectByExample="true" selectByExampleQueryId="true">
       <property name="useActualColumnNames" value="false"/>
       <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-      <domainObjectRenamingRule searchString="^Practice" replaceString=""/>
+      <domainObjectRenamingRule searchString="^(Practice|Sys|Sch)" replaceString=""/>
     </table>
   </context>
 

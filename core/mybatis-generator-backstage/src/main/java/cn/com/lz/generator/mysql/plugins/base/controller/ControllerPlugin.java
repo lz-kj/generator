@@ -15,11 +15,16 @@
  */
 package cn.com.lz.generator.mysql.plugins.base.controller;
 
+import io.swagger.annotations.Api;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.config.DomainObjectRenamingRule;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 生成 BaseServicePlugin
@@ -34,6 +39,23 @@ public class ControllerPlugin extends PluginAdapter {
     @Override
     public boolean controllerGenerated(TopLevelClass topLevelClass,
                                                  IntrospectedTable introspectedTable) {
+        //引入注解类
+        String tbName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
+        String path = getControllerPath(introspectedTable,tbName);
+        topLevelClass.addAnnotation("@RestController");
+        topLevelClass.addAnnotation("@RequestMapping(value = \""+path+"\")");
+        // swagger 注解 @Api(value = "/reg", tags = "预约信息")
+        topLevelClass.addAnnotation("@Api(value = \""+path+"\", tags = \""+getTags(introspectedTable.getRemarks())+"\")");
+        String swgApi = "io.swagger.annotations.Api";
+        FullyQualifiedJavaType impSwgApi = new FullyQualifiedJavaType(swgApi);
+        topLevelClass.addImportedType(impSwgApi);
+        String restController = "org.springframework.web.bind.annotation.RestController";
+        FullyQualifiedJavaType impRestController = new FullyQualifiedJavaType(restController);
+        topLevelClass.addImportedType(impRestController);
+        String restMapping = "org.springframework.web.bind.annotation.RequestMapping";
+        FullyQualifiedJavaType impRestMapping = new FullyQualifiedJavaType(restMapping);
+        topLevelClass.addImportedType(impRestMapping);
+
         //继承 BaseController
         String voImport = introspectedTable.getVoRecordType();
         String reqImport = introspectedTable.getReqRecordType();
@@ -72,11 +94,17 @@ public class ControllerPlugin extends PluginAdapter {
                 getFieldName(baseService,false));
         Field field = new Field(service, listOfCriterion);
         field.setVisibility(JavaVisibility.PROTECTED);
+        field.addAnnotation("@Autowired");
         topLevelClass.addField(field);
+        //引入org.springframework.beans.factory.annotation.Autowired
+        String autowired = "org.springframework.beans.factory.annotation.Autowired";
+        FullyQualifiedJavaType impAutowired = new FullyQualifiedJavaType(autowired);
+        topLevelClass.addImportedType(impAutowired);
 
         // 添加方法 afterPropertiesSet
         Method method = new Method("afterPropertiesSet");
         method.setVisibility(JavaVisibility.PUBLIC);
+        method.addAnnotation("@Override");
         method.addBodyLine("super.baseService = "+service+";");
         topLevelClass.addMethod(method);
 
@@ -92,6 +120,60 @@ public class ControllerPlugin extends PluginAdapter {
         }
 
         return shotName;
+    }
+
+    private String getPath(String tbName){
+        StringBuilder sb = new StringBuilder();
+
+        boolean nextPath = true;
+        for (int i = 0; i < tbName.length(); i++) {
+            char c = tbName.charAt(i);
+            switch (c) {
+                case '_':
+                case '-':
+                case '@':
+                case '$':
+                case '#':
+                case ' ':
+                case '/':
+                case '&':
+                    nextPath = true;
+                    break;
+
+                default:
+                    if (nextPath) {
+                        sb.append("/");
+                        sb.append(Character.toLowerCase(c));
+                        nextPath = false;
+                    } else {
+                        sb.append(Character.toLowerCase(c));
+                    }
+                    break;
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private String getControllerPath(IntrospectedTable introspectedTable,String tbName){
+        DomainObjectRenamingRule domainObjectRenamingRule = introspectedTable.getTableConfiguration().getDomainObjectRenamingRule();
+        String path = "";
+        if (domainObjectRenamingRule != null) {
+            Pattern pattern = Pattern.compile(domainObjectRenamingRule.getSearchString().toLowerCase());
+            String replaceString = domainObjectRenamingRule.getReplaceString();
+            replaceString = replaceString == null ? "" : replaceString; //$NON-NLS-1$
+            Matcher matcher = pattern.matcher(tbName);
+            path = getPath(matcher.replaceAll(replaceString));
+        }
+        return path;
+    }
+
+    private String getTags(String remarks){
+        String replaceChars[] = new String[]{"表"};
+        for (String repChar : replaceChars) {
+            remarks = remarks.replace(repChar,"");
+        }
+        return remarks;
     }
 
 }

@@ -35,6 +35,12 @@ public class BaseServiceImplPlugin extends PluginAdapter {
     @Override
     public boolean serviceImplGenerated(TopLevelClass topLevelClass,
                                                  IntrospectedTable introspectedTable) {
+        //添加注解
+        topLevelClass.addAnnotation("@Service");
+        //引入org.springframework.stereotype.Service
+        String serviceAuto = "org.springframework.stereotype.Service";
+        FullyQualifiedJavaType impServiceAuto = new FullyQualifiedJavaType(serviceAuto);
+        topLevelClass.addImportedType(impServiceAuto);
         //继承 BaseServiceImpl
         String modelImport = introspectedTable.getBaseRecordType();
         StringBuilder baseServiceImpl = new StringBuilder("BaseServiceImpl<");
@@ -73,7 +79,12 @@ public class BaseServiceImplPlugin extends PluginAdapter {
                 getFieldName(baseMapper,false));
         Field field = new Field(mapper, listOfCriterion);
         field.setVisibility(JavaVisibility.PROTECTED);
+        field.addAnnotation("@Autowired");
         topLevelClass.addField(field);
+        //引入org.springframework.beans.factory.annotation.Autowired
+        String autowired = "org.springframework.beans.factory.annotation.Autowired";
+        FullyQualifiedJavaType impAutowired = new FullyQualifiedJavaType(autowired);
+        topLevelClass.addImportedType(impAutowired);
 
         // 添加方法 afterPropertiesSet
         String model = introspectedTable.getBaseRecordType();
@@ -83,6 +94,7 @@ public class BaseServiceImplPlugin extends PluginAdapter {
         String vo = introspectedTable.getVoRecordType();
         String voName = getFieldName(vo,false);
         Method method = new Method("afterPropertiesSet");
+        method.addAnnotation("@Override");
         method.setVisibility(JavaVisibility.PUBLIC);
         method.addBodyLine("super.setMevt(this."+mapper+","+modelName+".class, "+
                 exampleName+".class, "+exampleName+".Criteria.class, "+voName+".class);");
