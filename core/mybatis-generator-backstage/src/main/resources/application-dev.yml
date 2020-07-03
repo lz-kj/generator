@@ -19,7 +19,7 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       filter:
         stat:
-          log-slow-sql: true
+          log-slow-sql: false
           slow-sql-millis: 2000
           enabled: true
         config:
