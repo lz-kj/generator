@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public abstract class BaseController<T,Model,Q> implements InitializingBean {
@@ -92,8 +93,23 @@ public abstract class BaseController<T,Model,Q> implements InitializingBean {
     @DeleteMapping(value = "/del/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "删除:通过ID", response = R.class, httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(code = 200, message = "删除成功")})
-    protected R del(@ApiParam(value = "ID", required = true) @PathVariable("id") String id) throws Exception {
+    protected R del(@ApiParam(value = "ID", required = true) @PathVariable("id") Long id) throws Exception {
         int result = baseService.deleteById(id);
+        return R.ok("删除成功",result);
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping(value = "/del/ids", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "删除:通过多个ID", response = R.class, httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({@ApiResponse(code = 200, message = "删除成功")})
+    protected R del(@RequestBody List<Long> ids) throws Exception {
+        int result = baseService.deleteByIds(ids);
         return R.ok("删除成功",result);
     }
 
@@ -145,30 +161,30 @@ public abstract class BaseController<T,Model,Q> implements InitializingBean {
     /**
      * 修改
      *
-     * @param req
+     * @param qureyReq
      * @return
      * @throws Exception
      */
     @PutMapping(value = "/update/byqry", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "修改:通过查询条件:无选择", response = R.class, httpMethod = "PUT", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(code = 200, message = "添加成功")})
-    protected R updateByQuery(@Valid Model req,@Valid Q query) throws Exception {
-        int result = baseService.updateByExample(req,query);
+    protected R updateByQuery(@RequestBody @Valid QureyReq<Q,Model> qureyReq) throws Exception {
+        int result = baseService.updateByExample(qureyReq.getReq(),qureyReq.getQuery());
         return R.ok("修改成功",result);
     }
 
     /**
      * 修改
      *
-     * @param req
+     * @param qureyReq
      * @return
      * @throws Exception
      */
     @PutMapping(value = "/update/byqry/selective", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "修改:通过查询条件:有选择", response = R.class, httpMethod = "PUT", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(code = 200, message = "添加成功")})
-    protected R updateByQuerySelective(@Valid Model req,@Valid Q query) throws Exception {
-        int result = baseService.updateSelective(req,query);
+    protected R updateByQuerySelective(@RequestBody @Valid QureyReq<Q,Model> qureyReq) throws Exception {
+        int result = baseService.updateSelective(qureyReq.getReq(),qureyReq.getQuery());
         return R.ok("修改成功",result);
     }
 
@@ -181,7 +197,7 @@ public abstract class BaseController<T,Model,Q> implements InitializingBean {
     @GetMapping(value = "/view/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "回显:根据ID", response = R.class, httpMethod = "GET", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(code = 200, message = "回显成功")})
-    protected R view(@ApiParam(value = "ID", required = true) @PathVariable("id") String id) throws Exception{
+    protected R view(@ApiParam(value = "ID", required = true) @PathVariable("id") Long id) throws Exception{
         Object result = baseService.queryByPrimaryKey(id);
         return R.ok("回显成功",result);
     }

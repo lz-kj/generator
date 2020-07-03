@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Vo implements Serializable {
+public class Vo{
 
     @ApiModelProperty("主键ID")
     private Long id;

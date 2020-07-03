@@ -49,9 +49,14 @@ public abstract class BaseServiceImpl<Model> implements BaseService<Vo, Req, Que
     }
 
     @Override
-    public int deleteById(String id) throws Exception {
+    public int deleteById(Long id) throws Exception {
         int result = this.getMapper().deleteByPrimaryKey(id);
         return result;
+    }
+
+    @Override
+    public int deleteByIds(List<Long> ids) throws Exception {
+        return 0;
     }
 
     @Override
@@ -105,10 +110,14 @@ public abstract class BaseServiceImpl<Model> implements BaseService<Vo, Req, Que
     }
 
     @Override
-    public Vo queryByPrimaryKey(String id) throws Exception {
+    public Vo queryByPrimaryKey(Long id) throws Exception {
         Vo result = (Vo)vo.newInstance();
         Object model = this.getMapper().selectByPrimaryKey(id);
-        BeanUtils.copyProperties(model,result);
+        if(!ObjectUtils.isEmpty(model)){
+            BeanUtils.copyProperties(model,result);
+        }else{
+            result = null;
+        }
         return result;
     }
 
@@ -225,7 +234,7 @@ public abstract class BaseServiceImpl<Model> implements BaseService<Vo, Req, Que
         Method method = e.getMethod("createCriteria");//得到方法对象
         Object criteriaObj = method.invoke(example);
         Class<?> criteria = criteriaObj.getClass();
-        Method methd = criteria.getMethod("andEqualToQuery",Map.class);//得到方法对象
+        Method methd = criteria.getMethod("baseQuery",Map.class);//得到方法对象
         methd.setAccessible(true);
         methd.invoke(criteriaObj,attrVal);
     }

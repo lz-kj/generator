@@ -1,6 +1,7 @@
 package cn.com.lz.generator.mysql.plugins.base.common;
 
 import io.swagger.annotations.ApiModel;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class R<T> implements Serializable {
 
   private static final long serialVersionUID = -7916551187176186703L;
 
+  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
   private Date timestamp;
 
   private int status;

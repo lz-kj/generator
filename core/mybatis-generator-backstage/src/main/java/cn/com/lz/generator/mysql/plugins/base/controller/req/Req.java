@@ -8,10 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Req implements Serializable {
+public class Req{
 
     @ApiModelProperty("id")
-//    @JsonIgnore
+    @JsonIgnore
     private Long id;
 
     @JsonIgnore

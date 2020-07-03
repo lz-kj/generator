@@ -1,11 +1,16 @@
 package cn.com.lz.generator.mysql.plugins.base.controller.query;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 
 import java.io.Serializable;
 
-public class Query implements Serializable {
+public class Query{
+    @ApiModelProperty("id")
+    @JsonIgnore
+    private Long id;
+
     @ApiModelProperty(value = "页码")
     private Integer pageNum = 1;
 
@@ -38,5 +43,13 @@ public class Query implements Serializable {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

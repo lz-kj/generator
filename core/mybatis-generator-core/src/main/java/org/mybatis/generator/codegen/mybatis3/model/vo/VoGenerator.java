@@ -49,6 +49,10 @@ public class VoGenerator extends AbstractJavaGenerator {
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);
+        //引入swagger 注解
+        String apiModelProperty = "io.swagger.annotations.ApiModelProperty";
+        FullyQualifiedJavaType impApiModelProperty = new FullyQualifiedJavaType(apiModelProperty);
+        topLevelClass.addImportedType(impApiModelProperty);
 
         //添加父类
         FullyQualifiedJavaType superClass = getSuperClass();
@@ -77,12 +81,21 @@ public class VoGenerator extends AbstractJavaGenerator {
                 continue;
             }
 
-            Field field = getJavaBeansField(introspectedColumn, context, introspectedTable);
+            Field field = getJavaBeansFieldWithOutDoc(introspectedColumn, context, introspectedTable);
             if (plugins.modelFieldGenerated(field, topLevelClass,
                     introspectedColumn, introspectedTable,
                     Plugin.ModelClassType.BASE_RECORD)) {
                 topLevelClass.addField(field);
-                topLevelClass.addImportedType(field.getType());
+                field.addAnnotation("@ApiModelProperty(value=\""+introspectedColumn.getRemarks()+"\")");
+                FullyQualifiedJavaType tp = field.getType();
+                topLevelClass.addImportedType(tp);
+                if(tp.getShortName().equals("Date")){
+                    field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\",timezone=\"GMT+8\")");
+                    //引入 JsonFormat 注解
+                    String jsonFormat = "com.fasterxml.jackson.annotation.JsonFormat";
+                    FullyQualifiedJavaType impJsonFormat = new FullyQualifiedJavaType(jsonFormat);
+                    topLevelClass.addImportedType(impJsonFormat);
+                }
             }
 
             Method method = getJavaBeansGetter(introspectedColumn, context, introspectedTable);

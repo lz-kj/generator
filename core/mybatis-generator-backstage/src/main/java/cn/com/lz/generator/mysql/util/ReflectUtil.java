@@ -56,6 +56,7 @@ public class ReflectUtil {
             field.setAccessible(true);
             //获取属性
             String name = field.getName();
+            if(name.equals("serialVersionUID")) continue;
             //获取属性值
             Object value = field.get(obj);
             if(!ObjectUtils.isEmpty(value)){

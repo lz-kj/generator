@@ -49,6 +49,10 @@ public class ReqGenerator extends AbstractJavaGenerator {
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);
+        //引入swagger 注解
+        String apiModelProperty = "io.swagger.annotations.ApiModelProperty";
+        FullyQualifiedJavaType impApiModelProperty = new FullyQualifiedJavaType(apiModelProperty);
+        topLevelClass.addImportedType(impApiModelProperty);
 
         //添加父类
         FullyQualifiedJavaType superClass = getSuperClass();
@@ -77,12 +81,37 @@ public class ReqGenerator extends AbstractJavaGenerator {
                 continue;
             }
 
-            Field field = getJavaBeansField(introspectedColumn, context, introspectedTable);
+            Field field = getJavaBeansFieldWithOutDoc(introspectedColumn, context, introspectedTable);
             if (plugins.modelFieldGenerated(field, topLevelClass,
                     introspectedColumn, introspectedTable,
                     Plugin.ModelClassType.BASE_RECORD)) {
+                boolean nullAble = introspectedColumn.isNullable();
+                field.addAnnotation("@ApiModelProperty(value=\""+introspectedColumn.getRemarks()+"\",required="+!nullAble+")");
                 topLevelClass.addField(field);
-                topLevelClass.addImportedType(field.getType());
+                FullyQualifiedJavaType tp = field.getType();
+                topLevelClass.addImportedType(tp);
+                if(tp.getShortName().equals("Date")){
+                    field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\",timezone=\"GMT+8\")");
+                    //引入 JsonFormat 注解
+                    String jsonFormat = "com.fasterxml.jackson.annotation.JsonFormat";
+                    FullyQualifiedJavaType impJsonFormat = new FullyQualifiedJavaType(jsonFormat);
+                    topLevelClass.addImportedType(impJsonFormat);
+                }
+                if(!nullAble){
+                    field.addAnnotation("@NotNull(message=\""+introspectedColumn.getRemarks()+"不能为空\")");
+                    //引入 NotNull 注解
+                    String notNull = "javax.validation.constraints.NotNull";
+                    FullyQualifiedJavaType impNotNull = new FullyQualifiedJavaType(notNull);
+                    topLevelClass.addImportedType(impNotNull);
+                    if(tp.getShortName().equals("String")){
+                        field.addAnnotation("@Size(max="+introspectedColumn.getLength()+",min=1)");
+                        //引入 Size 注解
+                        String size = "javax.validation.constraints.Size";
+                        FullyQualifiedJavaType impSize = new FullyQualifiedJavaType(size);
+                        topLevelClass.addImportedType(impSize);
+                    }
+                }
+
             }
 
             Method method = getJavaBeansGetter(introspectedColumn, context, introspectedTable);

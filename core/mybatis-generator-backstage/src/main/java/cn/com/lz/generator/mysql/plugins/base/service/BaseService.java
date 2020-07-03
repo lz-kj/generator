@@ -25,7 +25,9 @@ public interface BaseService<T,R,Q,Model> extends InitializingBean {
 
     int deleteByQuery(Q query) throws Exception;
 
-    int deleteById(String id) throws Exception;
+    int deleteById(Long id) throws Exception;
+
+    int deleteByIds(List<Long> ids) throws Exception;
 
     int insert(R req) throws Exception;
 
@@ -37,7 +39,7 @@ public interface BaseService<T,R,Q,Model> extends InitializingBean {
 
     List<T> queryBlob(Q query) throws Exception;
 
-    T queryByPrimaryKey(String id) throws Exception;
+    T queryByPrimaryKey(Long id) throws Exception;
 
     int updateSelective(R req, Q query) throws Exception;
 
