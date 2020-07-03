@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2019 the original author or authors.
+ *    Copyright 2006-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.AbstractKotlinGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
+import org.mybatis.generator.codegen.mybatis3.controller.ControllerGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator;
@@ -74,6 +75,8 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
         AbstractJavaClientGenerator javaServiceGenerator =
                 calculateServiceGenerators(warnings, progressCallback);
+
+        calculateControllerGenerators(warnings, progressCallback);
 
     }
 
@@ -126,6 +129,15 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         //创建implGenerator
         createServiceImplGenerator(warnings,progressCallback);
 
+        return javaGenerator;
+    }
+
+    protected AbstractJavaGenerator calculateControllerGenerators(List<String> warnings,
+                                                                     ProgressCallback progressCallback) {
+        AbstractJavaGenerator javaGenerator = new ControllerGenerator(getControllerProject());
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaGenerators.add(javaGenerator);
         return javaGenerator;
     }
 
@@ -182,6 +194,11 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         return javaGenerator;
     }
 
+    protected AbstractJavaGenerator createControllerGenerator() {
+        AbstractJavaGenerator javaGenerator = new ControllerGenerator(getControllerProject());
+        return javaGenerator;
+    }
+
     protected void calculateJavaModelGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
         if (getRules().generateExampleClass()) {
@@ -218,6 +235,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             javaGenerators.add(javaGenerator);
         }
     }
+
 
     protected void calculateJavaVoGenerators(List<String> warnings,
                                                 ProgressCallback progressCallback) {
@@ -302,6 +320,10 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
     protected String getServiceProject() {
         return context.getServiceGeneratorConfiguration().getTargetProject();
+    }
+
+    protected String getControllerProject() {
+        return context.getControllerGeneratorConfiguration().getTargetProject();
     }
 
     protected String getServiceImplProject() {

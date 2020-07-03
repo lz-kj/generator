@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
-public abstract class BaseConroller<T,Model,Q> implements InitializingBean {
+public abstract class BaseController<T,Model,Q> implements InitializingBean {
 
     @Autowired
     protected  HttpServletRequest request;

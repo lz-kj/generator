@@ -38,6 +38,7 @@ import org.mybatis.generator.api.KotlinFormatter;
 import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.api.XmlFormatter;
+import org.mybatis.generator.config.controller.ControllerGeneratorConfiguration;
 import org.mybatis.generator.config.controller.query.JavaQueryGeneratorConfiguration;
 import org.mybatis.generator.config.controller.req.JavaReqGeneratorConfiguration;
 import org.mybatis.generator.config.controller.vo.JavaVoGeneratorConfiguration;
@@ -70,6 +71,8 @@ public class Context extends PropertyHolder {
     private JavaClientGeneratorConfiguration javaClientGeneratorConfiguration;
 
     private ServiceGeneratorConfiguration serviceGeneratorConfiguration;
+
+    private ControllerGeneratorConfiguration controllerGeneratorConfiguration;
 
     private ArrayList<TableConfiguration> tableConfigurations;
 
@@ -128,6 +131,10 @@ public class Context extends PropertyHolder {
 
     public ServiceGeneratorConfiguration getServiceGeneratorConfiguration() {
         return serviceGeneratorConfiguration;
+    }
+
+    public ControllerGeneratorConfiguration getControllerGeneratorConfiguration() {
+        return controllerGeneratorConfiguration;
     }
 
     public JavaModelGeneratorConfiguration getJavaModelGeneratorConfiguration() {
@@ -210,9 +217,13 @@ public class Context extends PropertyHolder {
         if (javaClientGeneratorConfiguration != null) {
             javaClientGeneratorConfiguration.validate(errors, id);
         }
-
+        //service 校验
         if (serviceGeneratorConfiguration != null) {
             serviceGeneratorConfiguration.validate(errors, id);
+        }
+        //controller 校验
+        if (controllerGeneratorConfiguration != null) {
+            controllerGeneratorConfiguration.validate(errors, id);
         }
 
         IntrospectedTable it = null;
@@ -261,6 +272,10 @@ public class Context extends PropertyHolder {
     public void setServiceGeneratorConfiguration(
             ServiceGeneratorConfiguration serviceGeneratorConfiguration) {
         this.serviceGeneratorConfiguration = serviceGeneratorConfiguration;
+    }
+
+    public void setControllerGeneratorConfiguration(ControllerGeneratorConfiguration controllerGeneratorConfiguration) {
+        this.controllerGeneratorConfiguration = controllerGeneratorConfiguration;
     }
 
     public void setJavaModelGeneratorConfiguration(

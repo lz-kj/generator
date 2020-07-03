@@ -28,8 +28,11 @@
     <plugin type="cn.com.lz.generator.mysql.plugins.base.mapper.BaseMapperPlugin" />
     <!-- 自定义BaseService插件 -->
     <plugin type="cn.com.lz.generator.mysql.plugins.base.service.BaseServicePlugin" />
+    <!-- 自定义Controller插件 -->
+    <plugin type="cn.com.lz.generator.mysql.plugins.base.controller.ControllerPlugin" />
     <!-- 自定义serviceImpl插件 -->
     <plugin type="cn.com.lz.generator.mysql.plugins.base.service.impl.BaseServiceImplPlugin" />
+
     <!-- 自定义注解格式 -->
     <commentGenerator type="cn.com.lz.generator.mysql.internal.MysqlCommentGenerator">
       <!--<property name="suppressAllComments" value="true" />-->
@@ -90,6 +93,10 @@
     <!--mapper接口-->
     <serviceGenerator type="SERVICE_INTERFACE" targetPackage="cn.com.lz.generator.backstage.service" targetProject="src/main/java">
     </serviceGenerator>
+
+    <!--Controller 类-->
+    <controllerGenerator type="CONTROLLER" targetPackage="cn.com.lz.generator.backstage.controller" targetProject="src/main/java">
+    </controllerGenerator>
 
     <table schema="" tableName="practice_frame_tag" selectByPrimaryKeyQueryId="true"
            enableSelectByPrimaryKey="true" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true"

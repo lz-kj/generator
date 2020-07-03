@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2019 the original author or authors.
+ *    Copyright 2006-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.mybatis.generator.config.*;
+import org.mybatis.generator.config.controller.ControllerGeneratorConfiguration;
 import org.mybatis.generator.config.controller.query.JavaQueryGeneratorConfiguration;
 import org.mybatis.generator.config.controller.req.JavaReqGeneratorConfiguration;
 import org.mybatis.generator.config.controller.vo.JavaVoGeneratorConfiguration;
@@ -64,6 +65,7 @@ public abstract class IntrospectedTable {
         ATTR_RECORD_WITH_BLOBS_TYPE,
         ATTR_EXAMPLE_TYPE,
         ATTR_SERVICE_IMPL_TYPE,
+        ATTR_CONTROLLER_TYPE,
         ATTR_MYBATIS3_XML_MAPPER_PACKAGE,
         ATTR_MYBATIS3_XML_MAPPER_FILE_NAME,
         /** also used as XML Mapper namespace if a Java mapper is generated. */
@@ -400,6 +402,7 @@ public abstract class IntrospectedTable {
     public void initialize() {
         calculateJavaClientAttributes();
         calculateServiceAttributes();
+        calculateControllerAttributes();
         calculateModelAttributes();
         calculateVoAttributes();
         calculateReqAttributes();
@@ -751,6 +754,43 @@ public abstract class IntrospectedTable {
     /**
      * 推测 Service 命名
      */
+    protected void calculateControllerAttributes() {
+        if (context.getControllerGeneratorConfiguration() == null) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(calculateControllerPackage());
+        sb.append('.');
+        if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
+            sb.append('.');
+        }
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Controller"); //$NON-NLS-1$
+        setControllerType(sb.toString());
+    }
+
+    public void setControllerType(String exampleType) {
+        internalAttributes
+                .put(InternalAttribute.ATTR_CONTROLLER_TYPE, exampleType);
+    }
+
+    public String getControllerType() {
+        return internalAttributes.get(InternalAttribute.ATTR_CONTROLLER_TYPE);
+    }
+
+    protected String calculateControllerPackage() {
+        ControllerGeneratorConfiguration config = context.getControllerGeneratorConfiguration();
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+        return sb.toString();
+    }
+
+    /**
+     * 推测 Service 命名
+     */
     protected void calculateServiceAttributes() {
         if (context.getServiceGeneratorConfiguration() == null) {
             return;
@@ -770,36 +810,13 @@ public abstract class IntrospectedTable {
             sb.append("Service"); //$NON-NLS-1$
         }
         setMyBatis3JavaServiceType(sb.toString());
-//
-//        sb.setLength(0);
-//        sb.append(calculateJavaClientInterfacePackage());
-//        sb.append('.');
-//        if (stringHasValue(tableConfiguration.getSqlProviderName())) {
-//            sb.append(tableConfiguration.getSqlProviderName());
-//        } else {
-//            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
-//                sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
-//                sb.append('.');
-//            }
-//            sb.append(fullyQualifiedTable.getDomainObjectName());
-//            sb.append("SqlProvider"); //$NON-NLS-1$
-//        }
-//        setMyBatis3SqlProviderType(sb.toString());
-
-//        sb.setLength(0);
-//        sb.append(calculateJavaClientInterfacePackage());
-//        sb.append('.');
-//        sb.append(fullyQualifiedTable.getDomainObjectName());
-//        sb.append("DynamicSqlSupport"); //$NON-NLS-1$
-//        setMyBatisDynamicSqlSupportType(sb.toString());
-
 
         String exampleTargetPackage = calculateServiceImplPackage();
         sb.setLength(0);
         sb.append(exampleTargetPackage);
         sb.append('.');
         sb.append(fullyQualifiedTable.getDomainObjectName());
-        sb.append("Impl"); //$NON-NLS-1$
+        sb.append("ServiceImpl"); //$NON-NLS-1$
         setServiceImplType(sb.toString());
     }
 
@@ -913,6 +930,7 @@ public abstract class IntrospectedTable {
         sb.append(pakkage);
         sb.append('.');
         sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Vo");
         setVoRecordType(sb.toString());
     }
 
@@ -926,6 +944,7 @@ public abstract class IntrospectedTable {
         sb.append(pakkage);
         sb.append('.');
         sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Req");
         setReqRecordType(sb.toString());
     }
 
@@ -939,6 +958,7 @@ public abstract class IntrospectedTable {
         sb.append(pakkage);
         sb.append('.');
         sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Query");
         setQueryRecordType(sb.toString());
     }
 

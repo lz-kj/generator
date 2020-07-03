@@ -13,22 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.generator.config.controller.req;
+package org.mybatis.generator.config.controller;
 
-import org.mybatis.generator.config.PropertyHolder;
+import org.mybatis.generator.config.TypedPropertyHolder;
 
 import java.util.List;
 
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
-public class JavaReqGeneratorConfiguration extends PropertyHolder {
-
+public class ControllerGeneratorConfiguration extends TypedPropertyHolder {
     private String targetPackage;
-
     private String targetProject;
 
-    public JavaReqGeneratorConfiguration() {
+    public ControllerGeneratorConfiguration() {
         super();
     }
 
@@ -50,12 +48,12 @@ public class JavaReqGeneratorConfiguration extends PropertyHolder {
 
     public void validate(List<String> errors, String contextId) {
         if (!stringHasValue(targetProject)) {
-            errors.add(getString("ValidationError.0", contextId)); //$NON-NLS-1$
+            errors.add(getString("ValidationError.2", contextId)); //$NON-NLS-1$
         }
 
         if (!stringHasValue(targetPackage)) {
             errors.add(getString("ValidationError.12", //$NON-NLS-1$
-                    "JavaModelGenerator", contextId)); //$NON-NLS-1$
+                    "javaClientGenerator", contextId)); //$NON-NLS-1$
         }
     }
 }

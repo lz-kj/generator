@@ -13,19 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package cn.com.lz.generator.mysql.plugins.base.service.impl;
+package cn.com.lz.generator.mysql.plugins.base.controller;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 生成 BaseServicePlugin
  */
-public class BaseServiceImplPlugin extends PluginAdapter {
+public class ControllerPlugin extends PluginAdapter {
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -33,64 +32,53 @@ public class BaseServiceImplPlugin extends PluginAdapter {
     }
 
     @Override
-    public boolean serviceImplGenerated(TopLevelClass topLevelClass,
+    public boolean controllerGenerated(TopLevelClass topLevelClass,
                                                  IntrospectedTable introspectedTable) {
-        //继承 BaseServiceImpl
-        String modelImport = introspectedTable.getBaseRecordType();
-        StringBuilder baseServiceImpl = new StringBuilder("BaseServiceImpl<");
-        baseServiceImpl.append(modelImport.substring(modelImport.lastIndexOf(".")+1));
+        //继承 BaseController
+        String voImport = introspectedTable.getVoRecordType();
+        String reqImport = introspectedTable.getReqRecordType();
+        String queryImport = introspectedTable.getQueryRecordType();
+        StringBuilder baseServiceImpl = new StringBuilder("BaseController<");
+        baseServiceImpl.append(voImport.substring(voImport.lastIndexOf(".")+1));
+        baseServiceImpl.append(",");
+        baseServiceImpl.append(reqImport.substring(reqImport.lastIndexOf(".")+1));
+        baseServiceImpl.append(",");
+        baseServiceImpl.append(queryImport.substring(queryImport.lastIndexOf(".")+1));
         baseServiceImpl.append(">");
         FullyQualifiedJavaType clsBaseServiceImpl = new FullyQualifiedJavaType(baseServiceImpl.toString());
         topLevelClass.setSuperClass(clsBaseServiceImpl);
         //类引入BaseServiceImpl
-        String baseServiceImplImport = "cn.com.lz.generator.mysql.plugins.base.service.impl.BaseServiceImpl";
+        String baseServiceImplImport = "cn.com.lz.generator.mysql.plugins.base.controller.BaseController";
         FullyQualifiedJavaType impBaseServiceImpl = new FullyQualifiedJavaType(baseServiceImplImport);
         topLevelClass.addImportedType(impBaseServiceImpl);
-        //类引入model
-        FullyQualifiedJavaType impModel = new FullyQualifiedJavaType(modelImport);
-        topLevelClass.addImportedType(impModel);
-        String voImport = introspectedTable.getVoRecordType();
         //类引入vo
         FullyQualifiedJavaType impVo = new FullyQualifiedJavaType(voImport);
         topLevelClass.addImportedType(impVo);
-
-        //实现接口
-        String service = introspectedTable.getMyBatis3JavaServiceType();
-        FullyQualifiedJavaType clsBaseMapper = new FullyQualifiedJavaType(service.substring(service.lastIndexOf(".")+1));
-        topLevelClass.addSuperInterface(clsBaseMapper);
-        FullyQualifiedJavaType impBaseMapper = new FullyQualifiedJavaType(service);
-        topLevelClass.addImportedType(impBaseMapper);
-
+        //类引入req
+        FullyQualifiedJavaType impReq = new FullyQualifiedJavaType(reqImport);
+        topLevelClass.addImportedType(impReq);
+        //类引入query
+        FullyQualifiedJavaType impQuery = new FullyQualifiedJavaType(queryImport);
+        topLevelClass.addImportedType(impQuery);
 
         //添加属性 BaseMapper
-        String baseMapper = introspectedTable.getMyBatis3JavaMapperType();
-        //类引入Mapper
-        FullyQualifiedJavaType impMapper = new FullyQualifiedJavaType(baseMapper);
-        topLevelClass.addImportedType(impMapper);
+        String baseService = introspectedTable.getMyBatis3JavaServiceType();
+        //类引入Service
+        FullyQualifiedJavaType impService = new FullyQualifiedJavaType(baseService);
+        topLevelClass.addImportedType(impService);
         //获得名称
-        String mapper = getFieldName(baseMapper,true);
+        String service = getFieldName(baseService,true) + "Impl";
         FullyQualifiedJavaType listOfCriterion = new FullyQualifiedJavaType(
-                getFieldName(baseMapper,false));
-        Field field = new Field(mapper, listOfCriterion);
+                getFieldName(baseService,false));
+        Field field = new Field(service, listOfCriterion);
         field.setVisibility(JavaVisibility.PROTECTED);
         topLevelClass.addField(field);
 
         // 添加方法 afterPropertiesSet
-        String model = introspectedTable.getBaseRecordType();
-        String modelName = getFieldName(model,false);
-        String example = introspectedTable.getExampleType();
-        String exampleName = getFieldName(example,false);
-        String vo = introspectedTable.getVoRecordType();
-        String voName = getFieldName(vo,false);
         Method method = new Method("afterPropertiesSet");
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.addBodyLine("super.setMevt(this."+mapper+","+modelName+".class, "+
-                exampleName+".class, "+exampleName+".Criteria.class, "+voName+".class);");
+        method.addBodyLine("super.baseService = "+service+";");
         topLevelClass.addMethod(method);
-        //类引入Example
-        FullyQualifiedJavaType impExample = new FullyQualifiedJavaType(example);
-        topLevelClass.addImportedType(impExample);
-
 
         return true;
     }

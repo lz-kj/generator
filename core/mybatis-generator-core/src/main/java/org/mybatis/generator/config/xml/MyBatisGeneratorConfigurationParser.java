@@ -28,6 +28,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.mybatis.generator.config.*;
+import org.mybatis.generator.config.controller.ControllerGeneratorConfiguration;
 import org.mybatis.generator.config.controller.query.JavaQueryGeneratorConfiguration;
 import org.mybatis.generator.config.controller.req.JavaReqGeneratorConfiguration;
 import org.mybatis.generator.config.controller.vo.JavaVoGeneratorConfiguration;
@@ -190,6 +191,8 @@ public class MyBatisGeneratorConfigurationParser {
                 parseJavaClientGenerator(context, childNode);
             } else if ("serviceGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseServiceGenerator(context, childNode);
+            }  else if ("controllerGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseControllerGenerator(context, childNode);
             } else if ("table".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseTable(context, childNode);
             }
@@ -723,6 +726,39 @@ public class MyBatisGeneratorConfigurationParser {
         ServiceGeneratorConfiguration javaClientGeneratorConfiguration = new ServiceGeneratorConfiguration();
 
         context.setServiceGeneratorConfiguration(javaClientGeneratorConfiguration);
+
+        Properties attributes = parseAttributes(node);
+        String type = attributes.getProperty("type"); //$NON-NLS-1$
+        String targetPackage = attributes.getProperty("targetPackage"); //$NON-NLS-1$
+        String targetProject = attributes.getProperty("targetProject"); //$NON-NLS-1$
+
+        javaClientGeneratorConfiguration.setConfigurationType(type);
+        javaClientGeneratorConfiguration.setTargetPackage(targetPackage);
+        javaClientGeneratorConfiguration.setTargetProject(targetProject);
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node childNode = nodeList.item(i);
+
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseProperty(javaClientGeneratorConfiguration, childNode);
+            }
+        }
+    }
+
+    /**
+     * 设置配置信息 ServiceGeneratorConfiguration
+     * @param context
+     * @param node
+     */
+    private void parseControllerGenerator(Context context, Node node) {
+        ControllerGeneratorConfiguration javaClientGeneratorConfiguration = new ControllerGeneratorConfiguration();
+
+        context.setControllerGeneratorConfiguration(javaClientGeneratorConfiguration);
 
         Properties attributes = parseAttributes(node);
         String type = attributes.getProperty("type"); //$NON-NLS-1$

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2019 the original author or authors.
+ *    Copyright 2006-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public class ReqGenerator extends AbstractJavaGenerator {
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
                 introspectedTable.getReqRecordType());
-        TopLevelClass topLevelClass = new TopLevelClass(type+"Req");
+        TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);
 
